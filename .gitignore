@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.env
+*.db
+*.db-journal
+.scannerwork/
+qa/jmeter/results/
+qa/jmeter/report/
+qa/selenium/screenshots/
+*.log
+.DS_Store

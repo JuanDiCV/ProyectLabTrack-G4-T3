@@ -1,0 +1,18 @@
+{
+  "name": "@labtrack/qa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pruebas E2E con Selenium WebDriver y plan de carga JMeter para LabTrack",
+  "scripts": {
+    "e2e": "node --test --test-concurrency=1 \"selenium/*.e2e.test.mjs\"",
+    "e2e:login": "node --test selenium/01-login.e2e.test.mjs",
+    "e2e:reservation": "node --test selenium/02-reservation.e2e.test.mjs",
+    "e2e:lockout": "node --test selenium/03-lockout.e2e.test.mjs",
+    "load:smoke": "node jmeter/catalog-load-smoke.mjs",
+    "jmeter": "jmeter -n -t jmeter/CP-013-catalog-load.jmx -l jmeter/results/cp013.jtl -e -o jmeter/report"
+  },
+  "devDependencies": {
+    "selenium-webdriver": "^4.27.0"
+  }
+}

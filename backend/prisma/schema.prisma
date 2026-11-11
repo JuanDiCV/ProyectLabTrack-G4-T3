@@ -1,0 +1,60 @@
+// LabTrack - Modelo de datos
+// SQLite para portabilidad inmediata. Para PostgreSQL cambie provider = "postgresql" y DATABASE_URL.
+// Los estados se guardan como texto y se validan en la capa de dominio (src/shared/domain.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  name           String
+  studentCode    String        @unique
+  passwordHash   String
+  role           String        @default("STUDENT") // STUDENT | ADMIN
+  status         String        @default("Activo") // Activo | Penalizado
+  failedAttempts Int           @default(0)
+  isLocked       Boolean       @default(false)
+  lockedUntil    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  reservations   Reservation[]
+}
+
+model Equipment {
+  id            Int           @id @default(autoincrement())
+  name          String
+  inventoryCode String        @unique
+  category      String // Cómputo | Electrónica | Redes
+  status        String        @default("Disponible") // Disponible | Prestado
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  reservations  Reservation[]
+
+  @@index([category])
+}
+
+model Reservation {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  equipmentId     Int
+  date            String // YYYY-MM-DD
+  startTime       String // HH:mm
+  endTime         String // HH:mm
+  status          String    @default("Pendiente") // Pendiente | Aprobada | Rechazada | Finalizada
+  rejectionReason String?
+  returnedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  user            User      @relation(fields: [userId], references: [id])
+  equipment       Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@index([equipmentId, date, status])
+  @@index([userId, date, status])
+  @@index([status])
+}
