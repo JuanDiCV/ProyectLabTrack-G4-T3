@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+dist
+coverage
+.git
+.scannerwork
+*.db
+*.log
+backend/.env
+qa/jmeter/results
+qa/jmeter/report
+qa/selenium/screenshots
+

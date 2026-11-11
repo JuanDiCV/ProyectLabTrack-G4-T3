@@ -1,0 +1,49 @@
+# LabTrack + SonarQube Community
+#   docker compose up -d --build              -> app (5173/4000) + SonarQube (9000)
+#   docker compose --profile test run --rm tests   -> pruebas unitarias con cobertura
+#   docker compose --profile scan run --rm scanner -> análisis SonarQube (requiere SONAR_TOKEN)
+services:
+  app:
+    build: .
+    container_name: labtrack-app
+    ports:
+      - "5173:5173"
+      - "4000:4000"
+    environment:
+      VITE_API_PROXY: http://localhost:4000
+
+  tests:
+    build: .
+    profiles: ["test"]
+    command: ["sh", "-c", "npm run db:env -w backend && npm run test:coverage -w backend -- --coverage.clean=false"]
+    volumes:
+      - ./backend/coverage:/app/backend/coverage
+
+  sonarqube:
+    image: sonarqube:community
+    container_name: labtrack-sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+  scanner:
+    image: sonarsource/sonar-scanner-cli:latest
+    profiles: ["scan"]
+    depends_on:
+      - sonarqube
+    environment:
+      SONAR_HOST_URL: http://sonarqube:9000
+      SONAR_TOKEN: ${SONAR_TOKEN:-}
+    volumes:
+      - .:/usr/src
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+

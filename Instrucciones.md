@@ -41,7 +41,22 @@ Una sola prueba: `npm run test -w backend -- tests/unit/hu02-catalog.unit.test.t
 ## 4. Pruebas E2E (opcional)
 Con `npm run dev` activo, en otra terminal: `npm run e2e`.
 
-## 5. Imágenes de equipos
+## 5. Docker y SonarQube Community
+Requiere Docker Desktop.
+```bash
+docker compose up -d --build                      # app (5173/4000) + SonarQube (9000)
+docker compose --profile test run --rm tests      # pruebas unitarias + cobertura (backend/coverage)
+```
+1. Abra http://localhost:9000 (usuario/clave inicial `admin`/`admin`, le pedirá cambiarla).
+2. Cree el proyecto `labtrack` (manual) y genere un token (My Account → Security).
+3. Ejecute el análisis:
+```powershell
+$env:SONAR_TOKEN='<TOKEN>'; docker compose --profile scan run --rm scanner
+```
+Si SonarQube no arranca en Linux/WSL: `sysctl -w vm.max_map_count=262144`.
+Detener: `docker compose down` (agregue `-v` para borrar los datos de SonarQube).
+
+## 6. Imágenes de equipos
 Cada equipo tiene el campo `imageUrl` (BD). Las imágenes están en `frontend/public/equipment/`.
 Para usar una foto propia, copie el archivo allí, cambie `imageUrl` en `backend/prisma/seed.ts` (ej. `/equipment/mi-foto.jpg`) y ejecute `npm run db:seed`.
 Si un equipo no tiene imagen, el catálogo muestra "Sin imagen".
