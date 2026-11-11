@@ -25,6 +25,7 @@ export interface Equipment {
   inventoryCode: string;
   category: Category;
   status: EquipmentStatus;
+  imageUrl?: string | null;
 }
 
 export interface CatalogResponse {

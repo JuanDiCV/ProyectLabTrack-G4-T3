@@ -64,6 +64,7 @@ export interface EquipmentEntity {
   inventoryCode: string;
   category: Category;
   status: EquipmentStatus;
+  imageUrl?: string | null;
 }
 
 export interface TimeSlot {

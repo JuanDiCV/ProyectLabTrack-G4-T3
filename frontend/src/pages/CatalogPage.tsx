@@ -89,6 +89,7 @@ export function CatalogPage() {
         <table id="catalog-table" data-testid="catalog-table" className="min-w-full divide-y divide-slate-800">
           <thead>
             <tr>
+              <th className="table-head">Imagen</th>
               <th className="table-head">Equipo</th>
               <th className="table-head">Código de inventario</th>
               <th className="table-head">Categoría</th>
@@ -99,7 +100,7 @@ export function CatalogPage() {
           <tbody className="divide-y divide-slate-800">
             {loading && (
               <tr>
-                <td colSpan={5} className="table-cell text-center text-slate-400" data-testid="catalog-loading">
+                <td colSpan={6} className="table-cell text-center text-slate-400" data-testid="catalog-loading">
                   Cargando catálogo…
                 </td>
               </tr>
@@ -107,6 +108,24 @@ export function CatalogPage() {
             {!loading &&
               catalog?.items.map((item) => (
                 <tr key={item.id} id={`equipment-row-${item.inventoryCode}`} data-testid={`equipment-row-${item.inventoryCode}`}>
+                  <td className="table-cell">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        data-testid="equipment-image"
+                        loading="lazy"
+                        className="h-16 w-24 rounded-lg border border-slate-800 bg-slate-950 object-contain"
+                      />
+                    ) : (
+                      <div
+                        data-testid="equipment-image-placeholder"
+                        className="flex h-16 w-24 items-center justify-center rounded-lg border border-slate-800 bg-slate-950 text-[10px] text-slate-500"
+                      >
+                        Sin imagen
+                      </div>
+                    )}
+                  </td>
                   <td className="table-cell font-medium" data-testid="equipment-name">
                     {item.name}
                   </td>

@@ -32,6 +32,7 @@ model Equipment {
   inventoryCode String        @unique
   category      String // Cómputo | Electrónica | Redes
   status        String        @default("Disponible") // Disponible | Prestado
+  imageUrl      String? // Ruta/URL de la imagen del equipo
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   reservations  Reservation[]

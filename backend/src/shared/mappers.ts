@@ -52,6 +52,7 @@ export function toEquipmentEntity(row: Equipment): EquipmentEntity {
     inventoryCode: row.inventoryCode,
     category: oneOf(categories, row.category, 'category'),
     status: oneOf(equipmentStatuses, row.status, 'equipment.status'),
+    imageUrl: row.imageUrl,
   };
 }
 

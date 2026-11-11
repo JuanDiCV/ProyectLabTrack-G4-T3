@@ -25,10 +25,15 @@ interface SeedUser {
 }
 
 const equipment = [
-  { name: 'Laptop HP-001', inventoryCode: 'INV-COMP-001', category: 'Cómputo' },
-  { name: 'Proyector PR-002', inventoryCode: 'INV-COMP-002', category: 'Cómputo' },
-  { name: 'Osciloscopio Digital OS-01', inventoryCode: 'INV-ELEC-001', category: 'Electrónica' },
-  { name: 'Router Cisco ISR-4321', inventoryCode: 'INV-RED-001', category: 'Redes' },
+  { name: 'Laptop HP-001', inventoryCode: 'INV-COMP-001', category: 'Cómputo', imageUrl: '/equipment/laptop.svg' },
+  { name: 'Proyector PR-002', inventoryCode: 'INV-COMP-002', category: 'Cómputo', imageUrl: '/equipment/proyector.svg' },
+  {
+    name: 'Osciloscopio Digital OS-01',
+    inventoryCode: 'INV-ELEC-001',
+    category: 'Electrónica',
+    imageUrl: '/equipment/osciloscopio.svg',
+  },
+  { name: 'Router Cisco ISR-4321', inventoryCode: 'INV-RED-001', category: 'Redes', imageUrl: '/equipment/router.svg' },
 ] as const;
 
 async function upsertUser(user: SeedUser): Promise<void> {
@@ -68,7 +73,7 @@ async function main(): Promise<void> {
   for (const item of equipment) {
     await prisma.equipment.upsert({
       where: { inventoryCode: item.inventoryCode },
-      update: { name: item.name, category: item.category, status: 'Disponible' },
+      update: { name: item.name, category: item.category, imageUrl: item.imageUrl, status: 'Disponible' },
       create: { ...item, status: 'Disponible' },
     });
   }
